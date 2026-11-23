@@ -1,0 +1,271 @@
+{
+  "name": "CyberTutor - Scraper",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b7957ffc-2cff-4218-8de9-b815e494c611",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        176
+      ],
+      "id": "e837ee16-2a23-4368-be6d-e831e16472e8",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { json: { url: 'https://www.incibe.es/incibe-cert/alerta-temprana/avisos/feed' } },\n  { json: { url: 'https://www.cisa.gov/cybersecurity-advisories/all.xml' } },\n  { json: { url: 'https://www.welivesecurity.com/en/rss/feed/' } },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        112
+      ],
+      "id": "eab6b7f5-d2be-4987-8953-b925249ee621",
+      "name": "Feeds"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        112
+      ],
+      "id": "ea0c718b-fbb8-4b68-a0ba-86f12c25c31d",
+      "name": "RSS Read",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const mapa = {\n  'www.incibe.es': 'INCIBE-CERT',\n  'www.cisa.gov': 'CISA',\n  'www.welivesecurity.com': 'WeLiveSecurity (ESET)',\n};\n\nconst items = $input.all()\n  .map(i => i.json)\n  .filter(j => j.link && j.title)\n  .map(j => {\n    const f = new Date(j.isoDate || j.pubDate || '');\n    return { j, f, t: isNaN(f) ? 0 : f.getTime() };\n  })\n  .sort((a, b) => b.t - a.t);          // más recientes primero\n\nconst conteo = {};\nconst out = [];\nfor (const { j, f, t } of items) {\n  const m = String(j.link).match(/^https?:\\/\\/([^\\/]+)/);\n  const host = m ? m[1] : '';\n  const fuente = mapa[host] || host || 'desconocida';\n  conteo[fuente] = (conteo[fuente] || 0) + 1;\n  if (conteo[fuente] > 10) continue;     // máximo 10 por fuente\n  const resumen = String(j.contentSnippet || j.content || '')\n    .replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim().slice(0, 400);\n  out.push({ json: {\n    titulo: String(j.title).trim(),\n    fuente,\n    url: j.link,\n    fecha_publicacion: t ? f.toISOString() : null,\n    categoria: 'ciberseguridad',\n    resumen,\n  }});\n}\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        544,
+        112
+      ],
+      "id": "54ef42df-bbb6-42f5-9a5f-849792d5518d",
+      "name": "Normalizar"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "noticias",
+          "mode": "list",
+          "cachedResultName": "noticias"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "url": "={{ $json.url }}",
+            "titulo": "={{ $json.titulo }}",
+            "fuente": "={{ $json.fuente }}",
+            "fecha_publicacion": "={{ $json.fecha_publicacion }}",
+            "categoria": "={{ $json.categoria }}",
+            "resumen": "={{ $json.resumen }}"
+          },
+          "matchingColumns": [
+            "url"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "titulo",
+              "displayName": "titulo",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "fuente",
+              "displayName": "fuente",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fecha_publicacion",
+              "displayName": "fecha_publicacion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "categoria",
+              "displayName": "categoria",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "resumen",
+              "displayName": "resumen",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "creado_en",
+              "displayName": "creado_en",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [
+        768,
+        112
+      ],
+      "id": "b691fa8b-ca0f-4f9b-bdf8-f08200dec430",
+      "name": "Insert or update rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "pTA9531aorfE7bOK",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Feeds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feeds": {
+      "main": [
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Normalizar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "6c71b085-5d85-4b2f-8d4f-5fc68356c2f5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "88567ae16a27e6271ffe2ea5e78df7f527ec90ee933de5992a76909ebed266bb"
+  },
+  "nodeGroups": [],
+  "id": "S2NPWYomtuM6CuYZ",
+  "tags": []
+}

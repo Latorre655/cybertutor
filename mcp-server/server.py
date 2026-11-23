@@ -181,16 +181,21 @@ def plan_semana(numero: int) -> dict:
 
 
 @mcp.tool
-def listar_noticias(limite: int = 5) -> dict:
-    """Últimas noticias de ciberseguridad guardadas por el scraper (título, fuente, fecha, enlace)."""
+def listar_noticias(limite: int = 5, fuente: str = "") -> dict:
+    """Últimas noticias de ciberseguridad guardadas por el scraper (título, fuente, fecha, enlace).
+    Si el usuario pide una fuente concreta, pásala en 'fuente' (por ejemplo CISA, INCIBE o WeLiveSecurity);
+    déjala vacía para ver las más recientes de todas. 'fuentes_disponibles' lista las fuentes que hay."""
     limite = max(1, min(limite, 20))
-    return {
-        "noticias": query(
-            """SELECT titulo, fuente, fecha_publicacion, categoria, resumen, url
-               FROM noticias ORDER BY COALESCE(fecha_publicacion, creado_en) DESC LIMIT %s""",
-            (limite,),
-        )
-    }
+    fuente = fuente.strip()
+    noticias = query(
+        """SELECT titulo, fuente, fecha_publicacion, categoria, LEFT(resumen, 200) AS resumen, url
+           FROM noticias
+           WHERE (%s = '' OR fuente ILIKE %s)
+           ORDER BY COALESCE(fecha_publicacion, creado_en) DESC LIMIT %s""",
+        (fuente, f"%{fuente}%", limite),
+    )
+    fuentes = [r["fuente"] for r in query("SELECT DISTINCT fuente FROM noticias ORDER BY fuente")]
+    return {"fuentes_disponibles": fuentes, "noticias": noticias}
 
 
 @mcp.custom_route("/health", methods=["GET"])

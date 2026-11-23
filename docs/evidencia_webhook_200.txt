@@ -1,11 +1,11 @@
-﻿HTTP/1.1 404 Not Found
+HTTP/1.1 200 OK
 Content-Security-Policy: sandbox allow-downloads allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols
 Content-Type: application/json; charset=utf-8
-Content-Length: 359
-ETag: W/"167-gjrRlcn92FjepoFPIyZFpXIf8UY"
+Content-Length: 1523
+ETag: W/"5f3-jeNTcE/C9bjvch4PHwLAbGZ7JfM"
 Vary: Accept-Encoding
-Date: Mon, 23 Nov 2026 12:38:38 GMT
+Date: Mon, 23 Nov 2026 12:44:28 GMT
 Connection: keep-alive
 Keep-Alive: timeout=5
 
-{"code":404,"message":"The requested webhook \"POST cybertutor/chat\" is not registered.","hint":"The workflow must be active for a production URL to run successfully. You can activate the workflow using the toggle in the top-right of the editor. Note that unlike test URL calls, production URL calls aren't shown on the canvas (only in the executions list)"}
+{"respuesta":"¡Hola! Aquí tienes nuevamente el resumen de tu estado académico en el curso de Ciberseguridad:\n\n* **Situación:** Estás **en_juego** 🎮, lo que significa que tienes todas las oportunidades para terminar el semestre con éxito.\n* **Nota acumulada:** Llevas un acumulado de **2.02** sobre el **55.0%** evaluado del curso. Tu promedio en lo que ya se ha calificado es de **3.67**.\n* **Lo que falta:** Tienes un **45.0%** pendiente por evaluar en las 5 semanas que restan (estamos cursando la semana 11 de 16). Para alcanzar una nota de 3.0, necesitas obtener un promedio de **2.18** en lo que falta.\n* **Asistencia:** ¡Excelente\n! Tienes 9 asistencias y solo 1 falta registrada de 10 sesiones (el límite permitido es 3), por lo que tu estado es `ok`.\n\n---\n\n### 💡 Recomendaciones para asegurar tu meta:\n\n1. **Enfócate en las actividades de mayor peso:** Revisa cuáles son los siguientes talleres, proyectos o exámenes pendientes que conforman ese 45% y dales prioridad.\n2. **Sigue asistiendo con constancia:** Mantén ese buen hábito de asistencia para no perderte ningún concepto clave de lo que resta del semestre.\n3. **Usa los recursos de estudio:** Si tienes dudas sobre los temas de las unidades, consúltame para guiarte con pistas, ejercicios de práctica o material de repaso.\n\n*Nota: Recuerda que la nota mínima aprobatoria (3.0) es un supuesto del sistema que debes confirmar con el reglamento o tu docente.* ¡Mucho ánimo y a cerrar el semestre con toda la energía!"}

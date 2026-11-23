@@ -1,0 +1,9 @@
+﻿HTTP/1.1 403 Forbidden
+Content-Security-Policy: sandbox allow-downloads allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols
+WWW-Authenticate: Basic realm="Webhook"
+Date: Mon, 23 Nov 2026 12:40:48 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+Authorization data is wrong!

@@ -1,4 +1,19 @@
 services:
+  mcp-server:
+    build: ./mcp-server
+    container_name: cybertutor-mcp
+    restart: unless-stopped
+    environment:
+      - MCP_TOKEN=${MCP_TOKEN}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "9000:9000"
+    depends_on:
+      postgres:
+        condition: service_healthy
   postgres:
     image: pgvector/pgvector:pg16
     container_name: cybertutor-db

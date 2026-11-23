@@ -1,0 +1,11 @@
+﻿HTTP/1.1 404 Not Found
+Content-Security-Policy: sandbox allow-downloads allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-scripts allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols
+Content-Type: application/json; charset=utf-8
+Content-Length: 359
+ETag: W/"167-gjrRlcn92FjepoFPIyZFpXIf8UY"
+Vary: Accept-Encoding
+Date: Mon, 23 Nov 2026 12:38:38 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"code":404,"message":"The requested webhook \"POST cybertutor/chat\" is not registered.","hint":"The workflow must be active for a production URL to run successfully. You can activate the workflow using the toggle in the top-right of the editor. Note that unlike test URL calls, production URL calls aren't shown on the canvas (only in the executions list)"}

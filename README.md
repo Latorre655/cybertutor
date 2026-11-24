@@ -1,8 +1,8 @@
 # CyberTutor
 
-> Asistente académico inteligente para el curso de Ciberseguridad (18017) de Ingeniería de Sistemas, UNAB.
-
-**Estado:** prototipo universitario funcional, con despliegue de demostración en AWS Academy. **Autores:** Abi (automatización, datos e integración del agente) y Johan (Android, despliegue y conectividad). **Corte documental:** 24 de noviembre de 2026.
+**Estado:** Prototipo universitario funcional, con despliegue de demostración en AWS Academy. 
+**Autores:** Abigail Vargas Argüello (automatización, datos e integración del agente) y Johan Andrés Latorre Dulcey (Android, despliegue y conectividad). 
+**Corte documental:** 23 de noviembre de 2026.
 
 ## Índice
 
@@ -460,4 +460,6 @@ Repositorio: https://github.com/Latorre655/cybertutor
 
 Documentación oficial: [n8n](https://docs.n8n.io/), [MCP](https://modelcontextprotocol.io/), [PostgreSQL](https://www.postgresql.org/docs/), [pgvector](https://github.com/pgvector/pgvector), [Docker Compose](https://docs.docker.com/compose/), [Android](https://developer.android.com/), [AWS EC2](https://docs.aws.amazon.com/ec2/), [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/).
 
-Este README se basa en el historial técnico aportado, los registros de ejecución y la inspección del archivo Android rediseñado. No se pudo clonar el repositorio desde el entorno de documentación. Para una referencia exhaustiva de cada función, columna, propiedad y nodo falta revisar el Compose vigente, `server.py`, scripts SQL, Gradle, manifiesto Android y JSON de workflows. Los ejemplos operativos son instrucciones propuestas, no nuevas pruebas ejecutadas. No se asigna licencia sin confirmación de los autores.
+## Imagenes y pruebas de desarrollo
+
+
